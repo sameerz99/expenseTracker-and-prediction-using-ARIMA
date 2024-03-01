@@ -32,8 +32,10 @@
             <th scope="col">Id</th>
             <th scope="col">Name</th>
             <th scope="col">Amount</th>
+            <th scope="col">Category</th>
             <th scope="col">Date</th>
             <th scope="col">Description</th>
+            <th scope="col">Delete</th>
         </tr>
         </thead>
         <tbody>
@@ -41,20 +43,51 @@
             <th scope="row" th:text="${iStat.index + 1}"></th>
             <td th:text="${expense.expenseName}"></td>
             <td th:text="${expense.amount}"></td>
+            <td th:text="${expense.category.categoryName}"></td>
             <td th:text="${expense.date}"></td>
             <td th:text="${expense.description}"></td>
+            <td><a href="" th:href="@{/find-all/delete/{id}(id=${expense.expenseId})}" class="btn btn-danger">Delete</a></td>
         </tr>
 
         <tr th:each="expense, iStat : ${expensesBySearch}" th:if="${expensesBySearch.size() > 0}">
             <th scope="row" th:text="${iStat.index + 1}"></th>
             <td th:text="${expense.expenseName}"></td>
             <td th:text="${expense.amount}"></td>
+            <td th:text="${expense.category.categoryName}"></td>
             <td th:text="${expense.date}"></td>
             <td th:text="${expense.description}"></td>
+            <td><a href="" th:href="@{/find-all/delete/{id}(id=${expense.expenseId})}" class="btn btn-danger">Delete</a></td>
         </tr>
         </tbody>
     </table>
 </div>
+<button onclick="downloadReport()">Download Report</button>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    function downloadReport() {
+        // Use AJAX to trigger the download
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/downloadReport', true);
+        xhr.responseType = 'arraybuffer';
+
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                var blob = new Blob([xhr.response], { type: 'application/pdf' });
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = 'expense_report.pdf';
+                link.click();
+            } else {
+                // Handle errors
+                console.error('Failed to download report');
+            }
+        };
+
+        xhr.send();
+    }
+    /*]]>*/
+</script>
 
 
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>

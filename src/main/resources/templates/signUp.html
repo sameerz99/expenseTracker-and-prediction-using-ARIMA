@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<section class="login">
+    <div class="login_box">
+        <div class="left">
+            <div class="top_link"><a th:href="@{/}">Return home</a></div>
+            <div class="contact">
+                <form th:action="@{/sign-up}" method="post">
+                    <h2>REGISTER</h2>
+                    <input type="text" name="name" placeholder="NAME">
+                    <input type="text" name="email" placeholder="EMAIL">
+                    <input type="text" name="username" placeholder="USERNAME">
+                    <input type="password" name="password" placeholder="PASSWORD">
+
+                    <button class="submit">SIGN UP</button>
+                </form>
+            </div>
+        </div></div>
+
+</section>
+</body>
+</html>

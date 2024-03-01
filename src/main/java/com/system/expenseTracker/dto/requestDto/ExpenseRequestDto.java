@@ -1,5 +1,6 @@
 package com.system.expenseTracker.dto.requestDto;
 
+import com.system.expenseTracker.model.Category;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -14,4 +15,5 @@ public class ExpenseRequestDto {
     private double amount;
     private LocalDate date;
     private String description;
+    private Category category;
 }

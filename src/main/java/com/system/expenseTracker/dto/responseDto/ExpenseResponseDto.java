@@ -1,5 +1,6 @@
 package com.system.expenseTracker.dto.responseDto;
 
+import com.system.expenseTracker.model.Category;
 import com.system.expenseTracker.model.Expense;
 import lombok.*;
 
@@ -16,6 +17,7 @@ public class ExpenseResponseDto {
     private double amount;
     private LocalDate date;
     private String description;
+    private Category category;
 
     public ExpenseResponseDto(Expense expense){
         this.expenseId = expense.getExpenseId();
@@ -23,6 +25,10 @@ public class ExpenseResponseDto {
         this.amount=expense.getAmount();
         this.date=expense.getDate();
         this.description=expense.getDescription();
-
+        this.category = expense.getCategory();
+    }
+    // getter for categoryName
+    public String getCategoryName() {
+        return category != null ? category.getCategoryName() : null;
     }
 }

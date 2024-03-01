@@ -21,4 +21,15 @@ public class Expense {
     private double amount;
     private LocalDate date;
     private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id", referencedColumnName = "category_id",
+    foreignKey = @ForeignKey(name = "FK_EXPENSE_CATEGORY"))
+    private Category category;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id",
+    foreignKey = @ForeignKey(name ="FK_EXPENSE_USER"))
+    private User user;
+
 }
