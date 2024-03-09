@@ -9,6 +9,7 @@ import com.system.expenseTracker.dto.responseDto.ExpenseResponseDto;
 import com.system.expenseTracker.service.CategoryService;
 import com.system.expenseTracker.service.ExpenseService;
 import com.system.expenseTracker.service.other.ReportService;
+import com.system.expenseTracker.service.other.UserLogService;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletResponse;
 import net.sf.jasperreports.engine.JRException;
@@ -30,30 +31,45 @@ public class ExpenseMvcController {
     private final ExpenseService expenseService;
     private final CategoryService categoryService;
     private final ReportService reportService;
+    private final UserLogService userLogService;
     @Autowired
-    public ExpenseMvcController(ExpenseService expenseService, CategoryService categoryService, ReportService reportService) {
+    public ExpenseMvcController(ExpenseService expenseService, CategoryService categoryService, ReportService reportService, UserLogService userLogService) {
         this.expenseService = expenseService;
         this.categoryService = categoryService;
         this.reportService = reportService;
+        this.userLogService = userLogService;
     }
 
     @GetMapping("/")
-    public String home(Model model){return "index";}
+    public String index(Model model){return "index";}
+    @GetMapping("/home")
+    public String home(Model model){return "home";}
 
-    @GetMapping("/save")
-    public String getSaveExpenseInfo(Model model){
-        model.addAttribute("expense", new ExpenseRequestDto());
-        model.addAttribute("categories", categoryService.getAllCategory());
-        return "addExpense";}
+//    @GetMapping("/save")
+//    public String getSaveExpenseInfo(Model model){
+//        model.addAttribute("expense", new ExpenseRequestDto());
+//        model.addAttribute("categories", categoryService.getAllCategory());
+//        return "addExpense";}
     @PostMapping("/save")
     public String postSaveExpenseInfo(@ModelAttribute("expense") ExpenseRequestDto expenseRequestDto){
         expenseService.saveExpenseInfo(expenseRequestDto);
-        return "redirect:/";
+        return "redirect:/find-all";
     }
     @GetMapping("/find-all")
     public String getAllExpenses(Model model){
-        model.addAttribute("expenseList", expenseService.getAllExpenses());
+        String username = userLogService.getLoggedInUser().getUsername();
+        List<ExpenseResponseDto> expenseList = expenseService.getAllExpenses();
+        double sum = 0;
+        for(ExpenseResponseDto expense: expenseList){
+            sum +=expense.getAmount();
+        }
+        model.addAttribute("totalAmount",sum);
+        model.addAttribute("loggedInUser",username);
+        model.addAttribute("expenseList", expenseList);
         model.addAttribute("expenseSearch", new ExpenseSearch());
+        model.addAttribute("expense", new ExpenseRequestDto());
+        model.addAttribute("categories", categoryService.getAllCategory());
+
         return "expenseList";
     }
 
@@ -67,15 +83,24 @@ public class ExpenseMvcController {
     @GetMapping("/find-all/search")
     public String searchExpenses(@ModelAttribute ExpenseSearch expenseSearch, Model model){
         List<ExpenseResponseDto> expenses;
-        if(expenseSearch.getExpenseName() != null && !expenseSearch.getExpenseName().trim().isEmpty()){
-            expenses = expenseService.searchByTitle(expenseSearch.getExpenseName());
+        if(expenseSearch.getCategoryName() != null && !expenseSearch.getCategoryName().trim().isEmpty()){
+            expenses = expenseService.searchByTitle(expenseSearch.getCategoryName());
         } else if (expenseSearch.getStartDate()!=null && expenseSearch.getEndDate()!=null) {
             expenses = expenseService.searchByDateInterval(expenseSearch.getStartDate(),expenseSearch.getEndDate());
             
         }else{
             return "redirect:/find-all";
         }
-        model.addAttribute("expensesBySearch",expenses);
+        String username = userLogService.getLoggedInUser().getUsername();
+        double sum = 0;
+        for(ExpenseResponseDto expense: expenses){
+            sum +=expense.getAmount();
+        }
+        model.addAttribute("totalAmount",sum);
+        model.addAttribute("loggedInUser",username);
+        model.addAttribute("expenseList",expenses);
+        model.addAttribute("expense", new ExpenseRequestDto());
+        model.addAttribute("categories", categoryService.getAllCategory());
         return "expenseList";
     }
 

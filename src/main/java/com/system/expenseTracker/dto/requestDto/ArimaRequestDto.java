@@ -5,13 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ExpenseSearch {
-    private String categoryName;
-    private LocalDate startDate;
-    private LocalDate endDate;
+public class ArimaRequestDto {
+    private int forecastPeriod;
+    private List<Double> tsData;
 }

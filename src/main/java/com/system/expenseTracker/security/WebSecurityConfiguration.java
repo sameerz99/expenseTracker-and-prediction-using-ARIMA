@@ -53,7 +53,7 @@ public class WebSecurityConfiguration{
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers( "/login", "/sign-up").permitAll()
+                        .requestMatchers( "/cover","/login", "/sign-up").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(login -> login
                         .loginPage("/login")
@@ -67,7 +67,7 @@ public class WebSecurityConfiguration{
                         }))
 
                 .logout(logout -> logout.logoutUrl("/logout")
-                        .logoutSuccessUrl("/login")
+                        .logoutSuccessUrl("/")
                         .permitAll()
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID"))
@@ -88,7 +88,7 @@ public class WebSecurityConfiguration{
         if (isAdmin) {
             return "/admin";
         } else {
-            return "/";
+            return "/find-all";
         }
     }
 

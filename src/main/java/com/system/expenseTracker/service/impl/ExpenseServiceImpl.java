@@ -34,7 +34,6 @@ public class ExpenseServiceImpl implements ExpenseService {
         expense.setExpenseName(expenseRequestDto.getExpenseName());
         expense.setAmount(expenseRequestDto.getAmount());
         expense.setDate(expenseRequestDto.getDate());
-        expense.setDescription(expenseRequestDto.getDescription());
         expense.setCategory(expenseRequestDto.getCategory());
         expense.setUser(loggedInUser);
         Expense savedExpenses=expenseRepo.save(expense);
@@ -60,10 +59,10 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    public List<ExpenseResponseDto> searchByTitle(String expenseName) {
+    public List<ExpenseResponseDto> searchByTitle(String categoryName) {
         User loggedInUser = userLogService.getLoggedInUser();
         List<ExpenseResponseDto> returnList = new ArrayList<>();
-        List<Expense> expenseListByTitle = expenseRepo.findByUserAndExpenseNameContainingIgnoreCase(loggedInUser,expenseName);
+        List<Expense> expenseListByTitle = expenseRepo.findByUserAndCategoryCategoryNameContainingIgnoreCase(loggedInUser,categoryName);
         for(Expense expense: expenseListByTitle){
             ExpenseResponseDto expenseResponseDto = new ExpenseResponseDto(expense);
             returnList.add(expenseResponseDto);

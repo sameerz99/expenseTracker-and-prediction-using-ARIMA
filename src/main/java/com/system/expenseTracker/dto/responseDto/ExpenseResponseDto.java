@@ -16,7 +16,6 @@ public class ExpenseResponseDto {
     private String expenseName;
     private double amount;
     private LocalDate date;
-    private String description;
     private Category category;
 
     public ExpenseResponseDto(Expense expense){
@@ -24,7 +23,6 @@ public class ExpenseResponseDto {
         this.expenseName=expense.getExpenseName();
         this.amount=expense.getAmount();
         this.date=expense.getDate();
-        this.description=expense.getDescription();
         this.category = expense.getCategory();
     }
     // getter for categoryName

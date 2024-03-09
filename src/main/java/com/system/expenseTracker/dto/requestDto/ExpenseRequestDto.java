@@ -14,6 +14,5 @@ public class ExpenseRequestDto {
     private String expenseName;
     private double amount;
     private LocalDate date;
-    private String description;
     private Category category;
 }

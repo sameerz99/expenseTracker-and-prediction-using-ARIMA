@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ExpenseRepo extends JpaRepository<Expense, Integer> {
-    List<Expense> findByUserAndExpenseNameContainingIgnoreCase(User user,String expenseName);
+    List<Expense> findByUserAndCategoryCategoryNameContainingIgnoreCase(User user,String categoryName);
     List<Expense> findByUserAndDateBetween(User user,LocalDate startDate, LocalDate endDate);
 
     List<Expense> findByUser(User user);

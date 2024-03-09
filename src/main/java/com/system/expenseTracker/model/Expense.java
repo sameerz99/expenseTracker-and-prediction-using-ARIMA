@@ -20,7 +20,6 @@ public class Expense {
     private String expenseName;
     private double amount;
     private LocalDate date;
-    private String description;
 
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "category_id",
