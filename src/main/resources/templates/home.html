@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Expense Tracker</h1>
+<button><a href="#" th:href="@{/save}" style="text-decoration:none;">Add Expense</a>
+</button>
+<button><a href="#" th:href="@{/find-all}" style="text-decoration:none;">Expense List</a>
+</button>
+<button><a href="#" th:href="@{/save-category}" style="text-decoration:none;">Add Category</a>
+</button>
+<button><a href="#" th:href="@{/find-all-category}" style="text-decoration:none;">Category List</a>
+</button>
+<a th:href="@{/logout}" ><button>logout</button></a>
+</body>
+</html>
