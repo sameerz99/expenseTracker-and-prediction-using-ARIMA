@@ -14,7 +14,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 @Service
 public class ExpenseServiceImpl implements ExpenseService {
     private final ExpenseRepo expenseRepo;
@@ -58,6 +61,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         return returnList;
     }
 
+
     @Override
     public List<ExpenseResponseDto> searchByTitle(String categoryName) {
         User loggedInUser = userLogService.getLoggedInUser();
@@ -79,6 +83,28 @@ public class ExpenseServiceImpl implements ExpenseService {
             ExpenseResponseDto expenseResponseDto = new ExpenseResponseDto(expense);
             returnList.add(expenseResponseDto);
         }
+        return returnList;
+    }
+
+    @Override
+    public List<Double> getDailyExpense() {
+        User loggedInUser = userLogService.getLoggedInUser();
+        List<Double> returnList = new ArrayList<>();
+        List<Expense> expenseList = expenseRepo.findByUser(loggedInUser);
+        Map<LocalDate, Double> dailyTotals = new HashMap<>();
+        for (Expense expense : expenseList) {
+            LocalDate expenseDate = expense.getDate();
+
+            // Aggregate expenses for the same day
+            double currentTotal = dailyTotals.getOrDefault(expenseDate, 0.0);
+            dailyTotals.put(expenseDate, currentTotal + expense.getAmount());
+        }
+
+        // Add the total amounts to the return list
+        for (double totalAmount : dailyTotals.values()) {
+            returnList.add(totalAmount);
+        }
+
         return returnList;
     }
 }

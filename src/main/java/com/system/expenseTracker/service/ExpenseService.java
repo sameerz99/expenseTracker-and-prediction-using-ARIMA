@@ -13,4 +13,5 @@ public interface ExpenseService {
     List<ExpenseResponseDto> getAllExpenses();
     List<ExpenseResponseDto> searchByTitle(String expenseName);
     List<ExpenseResponseDto> searchByDateInterval(LocalDate startDate, LocalDate endDate);
+    List<Double> getDailyExpense();
 }

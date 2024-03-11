@@ -59,7 +59,7 @@
                 </form>
             </div>
             <br><div class="mb-3">
-            <form th:action="@{/arima}" method="get">
+            <form th:action="@{/arima}" method="get" onsubmit="return validateForm()">
                 <button type="submit" class="btn btn-outline-dark btn-sm btn-shadow">Expense Predict</button>
             </form>
         </div>
@@ -113,7 +113,25 @@
         </div>
     </div>
     <script th:inline="javascript">
+
         /*<![CDATA[*/
+
+        function validateForm() {
+            // Get the number of expenses from Thymeleaf model attribute
+            var expenseCount = /*[[${countExpense}]]*/;
+
+            // Set the minimum required expenses
+            var minExpenses = 10;
+
+            // Check if the user has at least 10 expenses
+            if (expenseCount < minExpenses) {
+                alert('Please enter at least ' + minExpenses + ' days of expenses to predict.');
+                return false; // Prevent form submission
+            }
+
+            // Allow form submission if validation passes
+            return true;
+        }
         function downloadReport() {
             // Use AJAX to trigger the download
             var xhr = new XMLHttpRequest();
@@ -135,6 +153,20 @@
 
             xhr.send();
         }
+         function expenseForm() {
+            var name = document.getElementById('name').value.trim();
+            var category = document.getElementById('category').value.trim();
+            var amount = document.getElementById('amount').value.trim();
+            var date = document.getElementById('date').value.trim();
+
+            if (name === '' || category === '' || amount === '' || date === '') {
+                alert('Please fill in all fields before submitting the form.');
+                return false; // Prevent form submission
+            }
+
+            return true; // Allow form submission
+        }
+
         /*]]>*/
     </script>
 
@@ -144,7 +176,7 @@
         <div class="container-sm">
             <h3 class="tableHead">Add expense below:</h3>
 
-            <form th:action="@{/save}" th:object="${expense}" method="post" novalidate >
+            <form th:action="@{/save}" th:object="${expense}" method="post" onsubmit="return expenseForm()" >
 
                 <div class="mb-3"> <!--name of expense-->
                     <label for="name"  class="form-label">Name of expense</label>

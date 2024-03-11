@@ -38,11 +38,7 @@ public class ArimaController {
     }
     @PostMapping("/arima/predict")
     public String arimaPredict(@ModelAttribute ArimaRequestDto arimaRequestDto, Model model){
-        List<ExpenseResponseDto> dto = expenseService.getAllExpenses();
-        List<Double> testData= new ArrayList<>();
-        for(ExpenseResponseDto expense: dto){
-            testData.add(expense.getAmount());
-        }
+        List<Double> testData = expenseService.getDailyExpense();
         arimaRequestDto.setTsData(testData);
         ArimaResponseDto arimaResponseDto = arimaApiService.getArimaPrediction(arimaRequestDto);
         String username = userLogService.getLoggedInUser().getUsername();

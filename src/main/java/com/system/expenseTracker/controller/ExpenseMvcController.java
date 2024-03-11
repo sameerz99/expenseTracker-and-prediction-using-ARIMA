@@ -24,7 +24,10 @@ import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
 
 import java.io.FileNotFoundException;
+import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class ExpenseMvcController {
@@ -60,15 +63,23 @@ public class ExpenseMvcController {
         String username = userLogService.getLoggedInUser().getUsername();
         List<ExpenseResponseDto> expenseList = expenseService.getAllExpenses();
         double sum = 0;
+        int count = 0;
+        Set<LocalDate> uniqueDates = new HashSet<>();
         for(ExpenseResponseDto expense: expenseList){
+            LocalDate expenseDate = expense.getDate();
+            if(!uniqueDates.contains(expenseDate)){
+                uniqueDates.add(expenseDate);
+                count +=1;}
             sum +=expense.getAmount();
         }
+        model.addAttribute("countExpense",count);
         model.addAttribute("totalAmount",sum);
         model.addAttribute("loggedInUser",username);
         model.addAttribute("expenseList", expenseList);
         model.addAttribute("expenseSearch", new ExpenseSearch());
         model.addAttribute("expense", new ExpenseRequestDto());
         model.addAttribute("categories", categoryService.getAllCategory());
+
 
         return "expenseList";
     }

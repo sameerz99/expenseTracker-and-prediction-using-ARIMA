@@ -28,10 +28,50 @@
 <div class="container-fluid" id="container">
     <div class="center-column d-flex justify-content-center">
         <div style="width:500px; padding-top:30px">
-            <p>Forecast: <span th:text="${arimaResponse.forecast}"></span></p>
+            <p>Forecast:</p>
+            <ul id="forecastList"></ul>
+            <p>Total Predicted Expense: <span id="totalExpense"></span></p>
+
+            <!-- Your other HTML content -->
+
+            <a th:href="@{/find-all}" class="btn btn-dark btn-sm btn-shadow cancel-btn">Go back</a>
         </div>
+
+
     </div>
+
 </div>
 
+<script th:inline="javascript">
+    /*<![CDATA[*/ // Use CDATA to avoid Thymeleaf syntax conflicts
+
+    // Get the JSON array from Thymeleaf model attribute
+    var forecastArray = /*[[${arimaResponse.forecast}]]*/;
+
+    // Round up each forecast value
+    var roundedForecastArray = forecastArray.map(function(value) {
+        return Math.ceil(value);
+    });
+
+    // Calculate the total expense
+    var totalExpense = roundedForecastArray.reduce(function(acc, value) {
+        return acc + value;
+    }, 0);
+
+    // Display the rounded values and total expense
+    var forecastList = document.getElementById('forecastList');
+    var totalExpenseSpan = document.getElementById('totalExpense');
+    var day = 0;
+    roundedForecastArray.forEach(function(value) {
+        var listItem = document.createElement('li');
+        day += 1;
+        listItem.textContent = 'Forecast day' +day+":"+ value;
+        forecastList.appendChild(listItem);
+    });
+
+    totalExpenseSpan.textContent = totalExpense;
+
+    /*]]>*/
+</script>
 </body>
 </html>
